@@ -4,6 +4,7 @@ import { Company } from 'src/company/company.entity';
 import { Repository } from 'typeorm';
 import { Announcement } from './announcement.entity';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
+import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 @Injectable()
 export class AnnouncementService {
@@ -31,7 +32,35 @@ export class AnnouncementService {
   }
 
   async remove(id: number) {
-    console.log(id);
     this.announcementRepository.delete({ aid: id });
+  }
+
+  async modify(id: number, updateAnnouncementDto: UpdateAnnouncementDto) {
+    const announcement = await this.announcementRepository.findOneBy({
+      aid: id,
+    });
+
+    // 뭐가 좀 아닌 것 같은데... 방법을 변경 할 필요성이 있음.
+    this.announcementRepository.update(
+      { aid: id },
+      {
+        position:
+          updateAnnouncementDto.position === undefined
+            ? announcement.position
+            : updateAnnouncementDto.position,
+        compensation:
+          updateAnnouncementDto.compensation === undefined
+            ? announcement.compensation
+            : updateAnnouncementDto.compensation,
+        content:
+          updateAnnouncementDto.content === undefined
+            ? announcement.content
+            : updateAnnouncementDto.content,
+        skill:
+          updateAnnouncementDto.skill === undefined
+            ? announcement.skill
+            : updateAnnouncementDto.skill,
+      },
+    );
   }
 }

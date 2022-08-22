@@ -1,9 +1,6 @@
-import { IsInt, IsString } from 'class-validator';
+import { IsString, IsInt } from 'class-validator';
 
-export class CreateAnnouncementDto {
-  @IsInt()
-  cid: number;
-
+export class UpdateAnnouncementDto {
   @IsString()
   position: string;
 
