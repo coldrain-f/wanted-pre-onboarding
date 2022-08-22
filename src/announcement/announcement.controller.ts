@@ -1,4 +1,4 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 
@@ -9,5 +9,10 @@ export class AnnouncementController {
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
     this.announcementService.create(createAnnouncementDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    this.announcementService.remove(id);
   }
 }

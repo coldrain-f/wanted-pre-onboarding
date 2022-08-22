@@ -29,4 +29,9 @@ export class AnnouncementService {
     );
     this.announcementRepository.save(announcement);
   }
+
+  async remove(id: number) {
+    console.log(id);
+    this.announcementRepository.delete({ aid: id });
+  }
 }
