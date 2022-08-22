@@ -3,16 +3,20 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   Param,
   Patch,
   Post,
+  UseFilters,
 } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { DetailAnnouncementDto } from './dto/detail-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 @Controller('announcement')
+@UseFilters(HttpExceptionFilter)
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
