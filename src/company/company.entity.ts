@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Announcement } from 'src/announcement/announcement.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Company {
@@ -13,4 +14,7 @@ export class Company {
 
   @Column()
   region: string;
+
+  @OneToMany(() => Announcement, (announcement) => announcement.company)
+  announcement: Announcement[];
 }
