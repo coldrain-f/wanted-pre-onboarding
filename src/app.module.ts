@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
+import { HistoryModule } from './history/history.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { CompanyModule } from './company/company.module';
 import { UserModule } from './user/user.module';
@@ -24,6 +25,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     AnnouncementModule,
     CompanyModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
