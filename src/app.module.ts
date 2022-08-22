@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
