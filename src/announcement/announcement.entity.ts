@@ -10,6 +10,20 @@ import {
 
 @Entity()
 export class Announcement {
+  constructor(
+    company: Company,
+    position: string,
+    compensation: number,
+    content: string,
+    skill: string,
+  ) {
+    this.company = company;
+    this.position = position;
+    this.compensation = compensation;
+    this.content = content;
+    this.skill = skill;
+  }
+
   @PrimaryGeneratedColumn()
   aid: number;
 
