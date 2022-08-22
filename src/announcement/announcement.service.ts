@@ -63,4 +63,8 @@ export class AnnouncementService {
       },
     );
   }
+
+  findAll() {
+    return this.announcementRepository.find({ relations: ['company'] });
+  }
 }
