@@ -7,6 +7,10 @@ import { UserModule } from './user/user.module';
 import { HistoryModule } from './history/history.module';
 import { AnnouncementModule } from './announcement/announcement.module';
 import { CompanyModule } from './company/company.module';
+import { Announcement } from './announcement/announcement.entity';
+import { Company } from './company/company.entity';
+import { User } from './user/user.entity';
+import { History } from './history/history.entity';
 
 @Module({
   imports: [
@@ -18,7 +22,7 @@ import { CompanyModule } from './company/company.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE,
-      entities: [],
+      entities: [Announcement, Company, User, History],
       synchronize: process.env.MODE === 'dev' ? true : false,
     }),
     UserModule,
