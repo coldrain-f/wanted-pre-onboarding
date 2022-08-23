@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UseFilters,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/company.entity';
 import { Repository } from 'typeorm';
@@ -71,5 +66,33 @@ export class AnnouncementService {
 
   findAll() {
     return this.announcementRepository.find({ relations: ['company'] });
+  }
+
+  async findById(id: number) {
+    const ann = await this.announcementRepository.findOne({
+      where: { aid: id },
+      relations: ['company'],
+    });
+
+    const annList = await this.announcementRepository.findBy({
+      company: ann.company,
+    });
+
+    const aidList: number[] = annList
+      .map((an) => an.aid)
+      .filter((aid) => aid !== ann.aid);
+
+    // ListDetailDTO와 DetailDTO를 분리해서 응답하도록 하면 좋을 것 같다.
+    return {
+      aid: ann.aid,
+      companyName: ann.company.name,
+      country: ann.company.country,
+      region: ann.company.region,
+      position: ann.position,
+      compensation: ann.compensation,
+      skill: ann.skill,
+      content: ann.content,
+      diffAnnouncements: aidList,
+    };
   }
 }

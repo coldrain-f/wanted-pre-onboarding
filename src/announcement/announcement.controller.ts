@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   Param,
   Patch,
   Post,
@@ -20,11 +19,17 @@ import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
+  /**
+   * 채용공고 등록 API
+   */
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
     this.announcementService.create(createAnnouncementDto);
   }
 
+  /**
+   * 채용공고 수정 API
+   */
   @Patch(':id')
   modify(
     @Param('id') id: number,
@@ -33,11 +38,19 @@ export class AnnouncementController {
     this.announcementService.modify(id, updateAnnouncementDto);
   }
 
+  /**
+   *
+   * 채용공고 삭제 API
+   */
   @Delete(':id')
   remove(@Param('id') id: number) {
     this.announcementService.remove(id);
   }
 
+  /**
+   *
+   * 채용공고 목록 API
+   */
   @Get()
   async findAll() {
     const annList = await this.announcementService.findAll();
@@ -53,5 +66,14 @@ export class AnnouncementController {
           ann.skill,
         ),
     );
+  }
+
+  /**
+   *
+   * 채용공고 상세 API
+   */
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.announcementService.findById(id);
   }
 }
