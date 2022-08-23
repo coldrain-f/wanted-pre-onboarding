@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Announcement } from './announcement.entity';
 import { ApplyAnnouncementDto } from './dto/apply-announcement.dto';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
+import { DetailAnnouncementDto } from './dto/detail-announcement.dto';
 import { ListDetailAnnouncementDto } from './dto/listDetail-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
@@ -45,7 +46,6 @@ export class AnnouncementService {
       aid: id,
     });
 
-    // 뭐가 좀 아닌 것 같은데... 방법을 변경 할 필요성이 있음.
     this.announcementRepository.update(
       { aid: id },
       {
@@ -102,18 +102,17 @@ export class AnnouncementService {
       .map((an) => an.aid)
       .filter((aid) => aid !== ann.aid);
 
-    // ListDetailDTO와 DetailDTO를 분리해서 응답하도록 하면 좋을 것 같다.
-    return {
-      aid: ann.aid,
-      companyName: ann.company.name,
-      country: ann.company.country,
-      region: ann.company.region,
-      position: ann.position,
-      compensation: ann.compensation,
-      skill: ann.skill,
-      content: ann.content,
-      diffAnnouncements: aidList,
-    };
+    return new DetailAnnouncementDto(
+      ann.aid,
+      ann.company.name,
+      ann.company.country,
+      ann.company.region,
+      ann.position,
+      ann.compensation,
+      ann.skill,
+      ann.content,
+      aidList,
+    );
   }
 
   apply(applyAnnouncementDto: ApplyAnnouncementDto) {
