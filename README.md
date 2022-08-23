@@ -8,6 +8,12 @@
 
 사용자와 채용공고는 N:M 관계이므로 지원내역이라는 테이블을 중간 관계 테이블로 두고 1:N, N:1 관계로 풀어서 설계했습니다.
 
+## 기술
+- Framework: Nest.js
+- ORM: TypeORM
+- RDBMS: MySQL
+
+
 ## API 구현
 ### 채용공고 등록 API
 예시 JSON 포맷을 보고 포맷에 따른 CreateAnnouncementDTO 클래스로 Body 데이터의 요청을 받아서 구현
