@@ -38,6 +38,7 @@ export class AnnouncementService {
       createAnnouncementDto.skill,
     );
     this.announcementRepository.save(announcement);
+    return announcement.aid;
   }
 
   async remove(id: number) {
