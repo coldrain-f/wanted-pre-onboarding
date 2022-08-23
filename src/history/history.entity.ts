@@ -4,6 +4,11 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class History {
+  constructor(aid: number, uid: number) {
+    this.aid = aid;
+    this.uid = uid;
+  }
+
   @PrimaryGeneratedColumn()
   hid: number;
 

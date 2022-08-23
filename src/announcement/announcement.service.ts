@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/company.entity';
+import { History } from 'src/history/history.entity';
 import { Repository } from 'typeorm';
 import { Announcement } from './announcement.entity';
+import { ApplyAnnouncementDto } from './dto/apply-announcement.dto';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
@@ -13,6 +15,8 @@ export class AnnouncementService {
     private announcementRepository: Repository<Announcement>,
     @InjectRepository(Company)
     private companyRepository: Repository<Company>,
+    @InjectRepository(History)
+    private historyRepository: Repository<History>,
   ) {}
 
   async create(createAnnouncementDto: CreateAnnouncementDto) {
@@ -94,5 +98,16 @@ export class AnnouncementService {
       content: ann.content,
       diffAnnouncements: aidList,
     };
+  }
+
+  apply(applyAnnouncementDto: ApplyAnnouncementDto) {
+    // 1회만 지원 가능하도록 예외 처리 필요
+
+    const history = new History(
+      applyAnnouncementDto.aid,
+      applyAnnouncementDto.uid,
+    );
+
+    this.historyRepository.save(history);
   }
 }

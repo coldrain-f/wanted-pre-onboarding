@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AnnouncementService } from './announcement.service';
+import { ApplyAnnouncementDto } from './dto/apply-announcement.dto';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { DetailAnnouncementDto } from './dto/detail-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
@@ -75,5 +76,14 @@ export class AnnouncementController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.announcementService.findById(id);
+  }
+
+  /**
+   *
+   * 채용공고 지원 API
+   */
+  @Post('/apply')
+  apply(@Body() applyAnnouncementDto: ApplyAnnouncementDto) {
+    return this.announcementService.apply(applyAnnouncementDto);
   }
 }
