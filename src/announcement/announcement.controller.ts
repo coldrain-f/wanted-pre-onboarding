@@ -53,20 +53,8 @@ export class AnnouncementController {
    * 채용공고 목록 API
    */
   @Get()
-  async findAll() {
-    const annList = await this.announcementService.findAll();
-    return annList.map(
-      (ann) =>
-        new DetailAnnouncementDto(
-          ann.aid,
-          ann.company.name,
-          ann.company.country,
-          ann.company.region,
-          ann.position,
-          ann.compensation,
-          ann.skill,
-        ),
-    );
+  findAll() {
+    return this.announcementService.findAll();
   }
 
   /**

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Announcement } from './announcement.entity';
 import { ApplyAnnouncementDto } from './dto/apply-announcement.dto';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
+import { ListDetailAnnouncementDto } from './dto/listDetail-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 @Injectable()
@@ -68,8 +69,23 @@ export class AnnouncementService {
     );
   }
 
-  findAll() {
-    return this.announcementRepository.find({ relations: ['company'] });
+  async findAll() {
+    const annList = await this.announcementRepository.find({
+      relations: ['company'],
+    });
+
+    return annList.map(
+      (ann) =>
+        new ListDetailAnnouncementDto(
+          ann.aid,
+          ann.company.name,
+          ann.company.country,
+          ann.company.region,
+          ann.position,
+          ann.compensation,
+          ann.skill,
+        ),
+    );
   }
 
   async findById(id: number) {
