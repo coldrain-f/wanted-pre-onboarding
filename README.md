@@ -1,73 +1,35 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## ERD 설계
+![image](https://user-images.githubusercontent.com/81298415/186118446-f0253e77-d200-4520-8256-06cd7e31e087.png)
+하나의 회사는 N개의 채용공고를 등록할 수 있다. (회사와 채용공고 1:N)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+한 명의 사용자는 N개의 채용공고에 지원할 수 있다. (사용자와 채용공고 1:N)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+하나의 채용공고는 N명의 사용자에게 지원될 수 있다. (채용공고와 사용자 1:N)
 
-## Description
+사용자와 채용공고는 N:M 관계이므로 지원내역이라는 테이블을 중간 관계 테이블로 두고 1:N, N:1 관계로 풀어서 설계했습니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## API 구현
+### 채용공고 등록 API
+예시 JSON 포맷을 보고 포맷에 따른 CreateAnnouncementDTO 클래스로 Body 데이터의 요청을 받아서 구현
+회사_id로 회사 Entity를 먼저 조회해 오고, 요청 DTO와 조회한 회사 Entity로 채용공고 Entity를 만들어 DB에 저장했습니다.
 
-## Installation
+### 채용공고 수정 API
+예시 JSON 포맷을 보고 포맷에 따른 UpdateAnnouncementDTO 클래스로 Body 데이터의 요청을 받아서 구현
+수정할 채용 공고를 조회해 오고 DTO의 값이 undefined가 아닌지 확인하여 undefined인 값들만 채용 공고에서 수정되도록 구현했습니다.
 
-```bash
-$ npm install
-```
+### 채용공고 삭제 API
+삭제 대상의 id를 받아서 DB에서 삭제처리 했습니다.
 
-## Running the app
+### 채용공고 목록 API
+TypeORM의 find() 메서드를 사용하여 구현했습니다.
+채용 공고와 연관된 회사 정보는 find() 메서드의 relations 옵션을 설정하여 조회했습니다.
+응답 JSON 포맷을 맞추기 위해서 ListDetailAnnouncementDTO를 만들어서 설정하여 응답하는 방식으로 구현했습니다.
 
-```bash
-# development
-$ npm run start
+### 채용 상세 페이지 API
+TypeORM의 findOne() 메서드를 사용하여 구현했습니다.
+채용 공고와 연관된 회사 정보는 findOne() 메서드의 relations 옵션을 설정하여 조회했습니다.
+회사가 올린 다른 채용공고는 회사_id를 가지고 findById() 메서드로 모든 채용 공고를 DB에서 조회해 오고 
+filter() 메서드로 동일한 채용 공고는 필터링하여 DetailAnnouncementDTO에 값을 설정하여 응답하는 방식으로 구현했습니다.
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+### 사용자 채용공고 지원 API
+채용공고_id와 사용자_id를 body로 받아서 중간 테이블인 지원내역 데이터에 저장하는 방식으로 구현했습니다.
