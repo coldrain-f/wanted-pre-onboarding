@@ -12,7 +12,6 @@ import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AnnouncementService } from './announcement.service';
 import { ApplyAnnouncementDto } from './dto/apply-announcement.dto';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
-import { DetailAnnouncementDto } from './dto/detail-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
 @Controller('announcement')

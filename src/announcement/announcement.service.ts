@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/company.entity';
 import { History } from 'src/history/history.entity';
@@ -22,10 +22,13 @@ export class AnnouncementService {
   ) {}
 
   async create(createAnnouncementDto: CreateAnnouncementDto) {
-    // 찾은 회사가 없을 경우 Exception 처리하기
     const company = await this.companyRepository.findOneBy({
       cid: createAnnouncementDto.cid,
     });
+
+    if (!company) {
+      throw new BadRequestException('company is not found.');
+    }
 
     const announcement = new Announcement(
       company,
@@ -94,6 +97,10 @@ export class AnnouncementService {
       relations: ['company'],
     });
 
+    if (!ann) {
+      throw new BadRequestException('announcement is not found.');
+    }
+
     const annList = await this.announcementRepository.findBy({
       company: ann.company,
     });
@@ -115,8 +122,13 @@ export class AnnouncementService {
     );
   }
 
-  apply(applyAnnouncementDto: ApplyAnnouncementDto) {
-    // 1회만 지원 가능하도록 예외 처리 필요
+  async apply(applyAnnouncementDto: ApplyAnnouncementDto) {
+    const historyEntity = await this.historyRepository.findOne({
+      where: { aid: applyAnnouncementDto.aid, uid: applyAnnouncementDto.uid },
+    });
+    if (historyEntity) {
+      throw new BadRequestException("I've already applied.");
+    }
 
     const history = new History(
       applyAnnouncementDto.aid,
