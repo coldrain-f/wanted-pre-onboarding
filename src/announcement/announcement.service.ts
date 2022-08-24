@@ -62,6 +62,10 @@ export class AnnouncementService {
       aid: id,
     });
 
+    if (!announcement) {
+      throw new NotFoundException(`announcement is not found. aid:${id}`);
+    }
+
     this.announcementRepository.update(
       { aid: id },
       {

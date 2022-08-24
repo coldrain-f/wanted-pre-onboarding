@@ -35,7 +35,7 @@ export class AnnouncementController {
     @Param('id') id: number,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
   ) {
-    this.announcementService.modify(id, updateAnnouncementDto);
+    return this.announcementService.modify(id, updateAnnouncementDto);
   }
 
   /**
