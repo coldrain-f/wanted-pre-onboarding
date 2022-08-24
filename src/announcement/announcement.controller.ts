@@ -24,7 +24,7 @@ export class AnnouncementController {
    */
   @Post()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    this.announcementService.create(createAnnouncementDto);
+    return this.announcementService.create(createAnnouncementDto);
   }
 
   /**
@@ -44,7 +44,7 @@ export class AnnouncementController {
    */
   @Delete(':id')
   remove(@Param('id') id: number) {
-    this.announcementService.remove(id);
+    return this.announcementService.remove(id);
   }
 
   /**

@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/company/company.entity';
 import { History } from 'src/history/history.entity';
@@ -27,7 +33,9 @@ export class AnnouncementService {
     });
 
     if (!company) {
-      throw new BadRequestException('company is not found.');
+      throw new NotFoundException(
+        `company is not found. cid:${createAnnouncementDto.cid}`,
+      );
     }
 
     const announcement = new Announcement(
@@ -38,10 +46,14 @@ export class AnnouncementService {
       createAnnouncementDto.skill,
     );
     this.announcementRepository.save(announcement);
-    return announcement.aid;
   }
 
   async remove(id: number) {
+    const annEntity = await this.announcementRepository.findOneBy({ aid: id });
+    console.log(annEntity);
+    if (!annEntity) {
+      throw new NotFoundException(`announcement is not found. aid:${id}`);
+    }
     this.announcementRepository.delete({ aid: id });
   }
 
