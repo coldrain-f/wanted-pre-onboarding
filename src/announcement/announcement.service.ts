@@ -27,7 +27,7 @@ export class AnnouncementService {
     private historyRepository: Repository<History>,
   ) {}
 
-  async create(createAnnouncementDto: CreateAnnouncementDto) {
+  async create(createAnnouncementDto: CreateAnnouncementDto): Promise<void> {
     const company = await this.companyRepository.findOneBy({
       cid: createAnnouncementDto.cid,
     });
@@ -48,7 +48,7 @@ export class AnnouncementService {
     this.announcementRepository.save(announcement);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     const annEntity = await this.announcementRepository.findOneBy({ aid: id });
     console.log(annEntity);
     if (!annEntity) {
@@ -57,7 +57,10 @@ export class AnnouncementService {
     this.announcementRepository.delete({ aid: id });
   }
 
-  async modify(id: number, updateAnnouncementDto: UpdateAnnouncementDto) {
+  async modify(
+    id: number,
+    updateAnnouncementDto: UpdateAnnouncementDto,
+  ): Promise<void> {
     const announcement = await this.announcementRepository.findOneBy({
       aid: id,
     });
@@ -89,7 +92,7 @@ export class AnnouncementService {
     );
   }
 
-  async findAll() {
+  async findAll(): Promise<ListDetailAnnouncementDto[]> {
     const annList = await this.announcementRepository.find({
       relations: ['company'],
     });
@@ -108,7 +111,7 @@ export class AnnouncementService {
     );
   }
 
-  async findById(id: number) {
+  async findById(id: number): Promise<DetailAnnouncementDto> {
     const ann = await this.announcementRepository.findOne({
       where: { aid: id },
       relations: ['company'],
@@ -139,7 +142,7 @@ export class AnnouncementService {
     );
   }
 
-  async apply(applyAnnouncementDto: ApplyAnnouncementDto) {
+  async apply(applyAnnouncementDto: ApplyAnnouncementDto): Promise<void> {
     const historyEntity = await this.historyRepository.findOne({
       where: { aid: applyAnnouncementDto.aid, uid: applyAnnouncementDto.uid },
     });
