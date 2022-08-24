@@ -115,7 +115,7 @@ export class AnnouncementService {
     });
 
     if (!ann) {
-      throw new BadRequestException('announcement is not found.');
+      throw new NotFoundException(`announcement is not found. aid:${id}`);
     }
 
     const annList = await this.announcementRepository.findBy({
